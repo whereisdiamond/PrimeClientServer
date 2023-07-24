@@ -8,14 +8,25 @@ public class Client {
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
 
-            System.out.print("Enter a number: ");
-            String numberStr = userInput.readLine();
-            int number = Integer.parseInt(numberStr);
+            while (true) {
+                System.out.print("Enter a number (type 'exit' to quit): ");
+                String input = userInput.readLine();
 
-            out.println(numberStr);
+                if (input.equalsIgnoreCase("exit")) {
+                    break; // Exit the loop if the user types 'exit'
+                }
 
-            String response = in.readLine();
-            System.out.println("Is the number prime? " + response);
+                try {
+                    int number = Integer.parseInt(input);
+
+                    out.println(input);
+
+                    String response = in.readLine();
+                    System.out.println("Is the number prime? " + response);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

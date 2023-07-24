@@ -13,18 +13,28 @@ public class ClientHandler extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
-            // Read the number from the client
-            String numberStr = in.readLine();
-            int number = Integer.parseInt(numberStr);
+            while (true) {
+                // Read the number from the client
+                String numberStr = in.readLine();
 
-            // Check if the number is prime
-            boolean isPrime = isPrime(number);
+                if (numberStr == null) {
+                    break; // Client has closed the connection
+                }
 
-            // Send the response to the client
-            if (isPrime) {
-                out.println("yes");
-            } else {
-                out.println("no");
+                int number = Integer.parseInt(numberStr);
+
+                // Acknowledge that the number has been received
+                System.out.println("Received number from client: " + number);
+
+                // Check if the number is prime
+                boolean isPrime = isPrime(number);
+
+                // Send the response to the client
+                if (isPrime) {
+                    out.println("yes");
+                } else {
+                    out.println("no");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
